@@ -143,13 +143,14 @@ public class interfaz_empleado extends JFrame{
                double sueldoActualizado= me.ActualizarSueldos(Double.parseDouble(txtSueldoActual.getText()),Double.parseDouble(txtBonos.getText()),Double.parseDouble(txtDescuentos.getText()));
                 System.out.println(sueldoActualizado);
                 txtSueldoAct.setText(String.valueOf(sueldoActualizado));
-                taEmpleadosRegistrados.setText(emp.toString()+" Sueldo Actualizado: " + sueldoActualizado);
+                //taEmpleadosRegistrados.setText(emp.toString()+" Sueldo Actualizado: " + sueldoActualizado);
             }
         });
         visualizarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 taEmpleadosRegistrados.setText(me.toString());
+
             }
         });
     }
@@ -173,6 +174,15 @@ private void BuscaPorCedula2(int cedula){
         JOptionPane.showMessageDialog(null, "Empleado no encontrado");
     }
 }
+    private void BuscaPorCedulaParaSueldo(int cedula){
+        empleado empleadoEncontrado= me.BuscarPorCedula(cedula);
+        if (empleadoEncontrado!=null){
+            String sueldoFinal=String.valueOf(me.ActualizarSueldos(emp.getSueldoTotal(),Double.parseDouble(txtBonos.getText()),Double.parseDouble(txtDescuentos.getText())));
+            taEmpleadosRegistrados.setText(emp.toString()+ " Sueldo Final (Bonos y/o Descuentos): " +sueldoFinal);
+        }else {
+            JOptionPane.showMessageDialog(null, "Empleado no encontrado");
+        }
+    }
 private void limpiar(){
     txtNombre.setText(null);
     txtCedula.setText(null);

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class mecanismo_empleado {
 private List<empleado> listaEmpleados=new ArrayList<>();
-
+private empleado emp;
 
 public void registrarEmpleados(empleado e){
     listaEmpleados.add(e);
@@ -50,8 +50,18 @@ public empleado BuscarPorCedula(int cedula){
 public double ActualizarSueldos(double sueldoTotal, double bonos, double descuentos){
 
     double sueldoFinal= sueldoTotal+bonos-descuentos;
+    //emp.setSueldoActualizado(sueldoFinal);
     return sueldoFinal;
 }
+    public double ActSueldos(int cedula, double sueldo) {
+        empleado ep=BuscarPorCedula(cedula);
+        if (ep!=null){
+
+            ep.setSueldoActualizado(sueldo);
+            return true;
+        }
+        return false;
+    }
     @Override
     public String toString() {
         return "Lista Empleados\n" + listaEmpleados;

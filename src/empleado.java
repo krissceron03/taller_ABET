@@ -9,6 +9,7 @@ public class empleado {
     private double sueldoTotal;
     private double bonos;
     private double descuentos;
+    private double sueldoFinal;
 
 
     public empleado(String nombre, String apellido, int cedula, String correo, double sueldo) {
@@ -20,6 +21,7 @@ public class empleado {
         this.aporte = aporteAlSeguroSocial();
         this.impuesto = impuesto();
         this.sueldoTotal=sueldo-impuesto()-aporteAlSeguroSocial();
+        this.sueldoFinal=sueldoTotal;
     }
 
     public String getNombre() {
@@ -102,10 +104,15 @@ public class empleado {
         this.descuentos = descuentos;
     }
 
+    public void setSueldoActualizado(double sueldoActualizado) {
+        this.sueldoFinal = sueldoActualizado;
+    }
+
     public double aporteAlSeguroSocial(){
         double aporte= sueldo*(9.35/100);
         return aporte;
     }
+
     public double impuesto(){
         if (sueldo<=5000){
             impuesto=0;
@@ -124,6 +131,6 @@ public class empleado {
     public String toString() {
         return "\nEmpleado:\n" +
                 "Nombre: '" + nombre + ", Apellido: '" + apellido + ", Cedula: " + cedula + ", Correo: '" + correo  +
-                "\nSueldo: " + sueldo + ", Aporte: " + aporte + ", Impuesto: " + impuesto + ", SueldoTotal: " + sueldoTotal;
+                "\nSueldo: " + sueldo + ", Aporte: " + aporte + ", Impuesto: " + impuesto + ", SueldoTotal: " + sueldoTotal + ", SueldoFinal (Bonos y Descuentos): "+ sueldoFinal;
     }
 }
