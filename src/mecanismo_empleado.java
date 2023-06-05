@@ -6,9 +6,13 @@ public class mecanismo_empleado {
 private List<empleado> listaEmpleados=new ArrayList<>();
 private empleado emp;
 
-public void registrarEmpleados(empleado e){
-    listaEmpleados.add(e);
-    System.out.println(listaEmpleados.get(0).getNombre());
+public boolean registrarEmpleados(empleado e){
+    if (BuscarPorCedula(e.getCedula())==null){
+        listaEmpleados.add(e);
+        return true;
+    }else {
+        return false;
+    }
 }
 public empleado BuscarPorCedula(int cedula){
     for (empleado em: listaEmpleados) {
@@ -47,16 +51,16 @@ public empleado BuscarPorCedula(int cedula){
         listaEmpleados.add(new empleado("Mateo", "Encalada",1823459260,"mateoencalada@outlook.com",500));
         listaEmpleados.add(new empleado("Dylan", "Clerque",1745672345,"dylanclerque@outlook.com",600));
     }
-public double ActualizarSueldos(double sueldoTotal, double bonos, double descuentos){
+public double ActualizarSueldos(int cedula, double sueldoTotal, double bonos, double descuentos){
 
     double sueldoFinal= sueldoTotal+bonos-descuentos;
+    ActSueldos(cedula, sueldoFinal);
     //emp.setSueldoActualizado(sueldoFinal);
     return sueldoFinal;
 }
-    public double ActSueldos(int cedula, double sueldo) {
+    public boolean ActSueldos(int cedula, double sueldo) {
         empleado ep=BuscarPorCedula(cedula);
         if (ep!=null){
-
             ep.setSueldoActualizado(sueldo);
             return true;
         }

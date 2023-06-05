@@ -1,3 +1,5 @@
+import Validaciones.Validacion;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +37,7 @@ public class interfaz_empleado extends JFrame{
     private JButton visualizarButton;
     private mecanismo_empleado me ;
     private empleado emp;
+    private Validacion validacion = new Validacion();
     public interfaz_empleado(String titulo) {
         super(titulo);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,11 +59,33 @@ public class interfaz_empleado extends JFrame{
         btnRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                me.registrarEmpleados(new empleado(txtNombre.getText(), txtApellido.getText(),Integer.parseInt(txtCedula.getText()), txtCorreo.getText(),Double.parseDouble(txtSueldo.getText())));
-                JOptionPane.showMessageDialog(null,"Empleado registrado correctamente");
-                taEmpleadosRegistrados.setText(me.toString());
+                boolean[] validarTexto=new boolean[7];
+                validarTexto[1]=txtNombre.getText().isBlank(); //retorna true si está vacío
+                validarTexto[2]=txtApellido.getText().isBlank();
+                validarTexto[3]=validacion.validarCedula(txtCedula.getText());//retorna true si es cédula Ecuatoriana
+                validarTexto[4]=txtCorreo.getText().isBlank();
+                validarTexto[5]=validacion.validacionStringInt(txtSueldo.getText());//retorna true si es valido
 
-            }
+                if (validarTexto[3]) {
+                    if (validarTexto[5]) {
+                        if (validarTexto[1] == false && validarTexto[2] == false && validarTexto[4] == false) {
+                            if (me.registrarEmpleados(new empleado(txtNombre.getText(), txtApellido.getText(), Integer.parseInt(txtCedula.getText()), txtCorreo.getText(), Double.parseDouble(txtSueldo.getText())))) {
+                                JOptionPane.showMessageDialog(null, "Empleado registrado correctamente");
+                                // taEmpleadosRegistrados.setText(me.toString());
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Empleado ya existente");
+                            }
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Campos incompletos, complete todos los campos");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Sueldo inválido, verifique que el sueldo sea válido");
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(null,"Cédula no válida");
+                }
+                        }
 
         });
 
@@ -140,7 +165,7 @@ public class interfaz_empleado extends JFrame{
         btnActualizarSueldo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               double sueldoActualizado= me.ActualizarSueldos(Double.parseDouble(txtSueldoActual.getText()),Double.parseDouble(txtBonos.getText()),Double.parseDouble(txtDescuentos.getText()));
+               double sueldoActualizado= me.ActualizarSueldos(Integer.parseInt(txtCedulaSueldo.getText()),Double.parseDouble(txtSueldoActual.getText()),Double.parseDouble(txtBonos.getText()),Double.parseDouble(txtDescuentos.getText()));
                 System.out.println(sueldoActualizado);
                 txtSueldoAct.setText(String.valueOf(sueldoActualizado));
                 //taEmpleadosRegistrados.setText(emp.toString()+" Sueldo Actualizado: " + sueldoActualizado);
@@ -177,7 +202,7 @@ private void BuscaPorCedula2(int cedula){
     private void BuscaPorCedulaParaSueldo(int cedula){
         empleado empleadoEncontrado= me.BuscarPorCedula(cedula);
         if (empleadoEncontrado!=null){
-            String sueldoFinal=String.valueOf(me.ActualizarSueldos(emp.getSueldoTotal(),Double.parseDouble(txtBonos.getText()),Double.parseDouble(txtDescuentos.getText())));
+            String sueldoFinal=String.valueOf(me.ActualizarSueldos(Integer.parseInt(txtCedulaSueldo.getText()),emp.getSueldoTotal(),Double.parseDouble(txtBonos.getText()),Double.parseDouble(txtDescuentos.getText())));
             taEmpleadosRegistrados.setText(emp.toString()+ " Sueldo Final (Bonos y/o Descuentos): " +sueldoFinal);
         }else {
             JOptionPane.showMessageDialog(null, "Empleado no encontrado");
